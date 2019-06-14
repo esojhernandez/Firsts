@@ -1,0 +1,86 @@
+---
+title: "Dekking file by Aruba ISIC 2017"
+output: 
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
+#Load data SVB Raw
+```{r}
+library(dplyr)
+setwd("C:/Users/Jose/Desktop/wn/WN_CSV/2017")
+
+wn2017q1 <-read.csv("2017q1.csv",stringsAsFactors = FALSE)
+wn2017q2 <-read.csv("2017q2.csv",stringsAsFactors = FALSE)
+wn2017q3 <-read.csv("2017q3.csv",stringsAsFactors = FALSE)
+wn2017q4 <-read.csv("2017q4.csv",stringsAsFactors = FALSE)
+
+metadata <- read.csv("2013-2018.csv", stringsAsFactors = FALSE)
+```
+
+#Insert Column Period
+```{r}
+wn2017q1$periode <- rep("2017q1", nrow(wn2017q1))
+wn2017q2$periode <- rep("2017q2", nrow(wn2017q2))
+wn2017q3$periode <- rep("2017q3", nrow(wn2017q3))
+wn2017q4$periode <- rep("2017q4", nrow(wn2017q4))
+```
+
+# Merge all Q's for 2017
+```{r}
+wn2017All <- bind_rows(wn2017q1,wn2017q2,wn2017q3,wn2017q4)
+```
+
+#Remove Separate Q's
+```{r}
+rm(wn2017q1, wn2017q2, wn2017q3, wn2017q4)
+```
+
+#Remove DUplicates
+```{r}
+wn2017All <- wn2017All %>% distinct()
+```
+
+#Sum of Maandloon per Cohiercode multiply by 3 for year Maandloon
+```{r}
+wg2017 <- wn2017All %>%
+  group_by(Code) %>%
+      summarize(Maandloon_Year= sum(Maandloon)*3)
+```
+
+#Selection metadata
+```{r}
+metadata_sel <- metadata[c("Persoonsnr", "Company_name_SVB", "Trade_name_SVB", "Aruba_ISIC_CBS", "Economic_Activity_Rev_4", "Sector_Code_SVB","CohierCode")]
+```
+
+#Joining metadata_sel with wg2017
+```{r}
+metadata_sel$CohierCode <- as.numeric(metadata_sel$CohierCode)
+
+companies2017 <- left_join(wg2017,metadata_sel, by = c("Code"="CohierCode"))
+```
+
+#Sort Ascending Aruba_ISIC_CBS and descending Maandloon_Year
+#Recoding Aruba_ISIC_CBS as Factor
+# Group companies by Aruba_ISIC_CBS
+# create variable cum_Maandloon_Year which is cumulative sum of Maandloon_Year by Aruba_ISIC_CBS
+```{r}
+companies2017 <- arrange(companies2017, Aruba_ISIC_CBS, -Maandloon_Year)
+companies2017$Aruba_ISIC_CBS <- factor(companies2017$Aruba_ISIC_CBS)
+           
+companies2017 <- companies2017 %>%
+                      group_by(Aruba_ISIC_CBS) %>%
+                      mutate(cum_Maandloon_Year = cumsum(Maandloon_Year))
+
+```
+
+# new variable containing cumulative percentage of cum_Maandloon_Year per Aruba_ISIC_CBS
+```{r}
+companies2017 <- companies2017 %>%
+                      group_by(Aruba_ISIC_CBS) %>%
+                      mutate(cum_Maandloon_Perc = cum_Maandloon_Year/sum(Maandloon_Year))
+```
+
+#Produce csv File
+```{r}
+write.csv(companies2017, file="Dekking2017.csv")
