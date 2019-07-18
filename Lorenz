@@ -22,6 +22,10 @@ Read in data.
 ```{r}
 # WN
 
+WN_2009_Q4 <- read.csv("WN_2009_Q4.csv", stringsAsFactors = FALSE)
+WN_2010_Q4 <- read.csv("WN_2010_Q4.csv", stringsAsFactors = FALSE)
+WN_2011_Q4 <- read.csv("WN_2011_Q4.csv", stringsAsFactors = FALSE)
+WN_2012_Q4 <- read.csv("WN_2012_Q4.csv", stringsAsFactors = FALSE)
 WN_2013_Q4 <- read.csv("WN_2013_Q4.csv", stringsAsFactors = FALSE)
 WN_2014_Q4 <- read.csv("WN_2014_Q4.csv", stringsAsFactors = FALSE)
 WN_2015_Q4 <- read.csv("WN_2015_Q4.csv", stringsAsFactors = FALSE)
@@ -35,6 +39,18 @@ DRH <- read.csv("DRH2009-2018.csv")
 # WN file manipulations
 Remove duplicates that meet the criteria that all variables are the same.
 ```{r}
+WN_2009_Q4$Period <- "2009.04"
+WN_2009_Q4 <- WN_2009_Q4 %>% distinct()
+
+WN_2010_Q4$Period <- "2010.04"
+WN_2010_Q4 <- WN_2010_Q4 %>% distinct()
+
+WN_2011_Q4$Period <- "2011.04"
+WN_2011_Q4 <- WN_2011_Q4 %>% distinct()
+
+WN_2012_Q4$Period <- "2012.04"
+WN_2012_Q4 <- WN_2012_Q4 %>% distinct()
+
 WN_2013_Q4$Period <- "2013.04"
 WN_2013_Q4 <- WN_2013_Q4 %>% distinct()
 
@@ -88,6 +104,11 @@ DRH$Aanv_DVB            <- as.character(DRH$Aanv_DVB)
 DRH$Omschrijving        <- as.character(DRH$Omschrijving)
 DRH$Klasse              <- as.integer(DRH$Klasse)
 DRH$Code                <- as.character(DRH$Code)
+
+WN_2009_Q4$Code         <- as.character(WN_2009_Q4$Code)
+WN_2010_Q4$Code         <- as.character(WN_2010_Q4$Code)
+WN_2011_Q4$Code         <- as.character(WN_2011_Q4$Code)
+WN_2012_Q4$Code         <- as.character(WN_2012_Q4$Code)
 WN_2013_Q4$Code         <- as.character(WN_2013_Q4$Code)
 WN_2014_Q4$Code         <- as.character(WN_2014_Q4$Code)
 WN_2015_Q4$Code         <- as.character(WN_2015_Q4$Code)
@@ -99,6 +120,10 @@ DRH$Period              <- as.character(DRH$Periode)
 DRH                     <- DRH[,-1]
 
 
+DRH_subset2009.04 <-filter(DRH,Period==2009.04)
+DRH_subset2010.04 <-filter(DRH,Period==2010.04)
+DRH_subset2011.04 <-filter(DRH,Period==2011.04)
+DRH_subset2012.04 <-filter(DRH,Period==2012.04)
 DRH_subset2013.04 <-filter(DRH,Period==2013.04)
 DRH_subset2014.04 <-filter(DRH,Period==2014.04)
 DRH_subset2015.04 <-filter(DRH,Period==2015.04)
@@ -107,6 +132,10 @@ DRH_subset2017.04 <-filter(DRH,Period==2017.04)
 DRH_subset2018.04 <-filter(DRH,Period==2018.04)
 
 
+WN_2009_Q4               <- bind_rows(WN_2009_Q4,DRH_subset2009.04)
+WN_2010_Q4               <- bind_rows(WN_2010_Q4,DRH_subset2010.04)
+WN_2011_Q4               <- bind_rows(WN_2011_Q4,DRH_subset2011.04)
+WN_2012_Q4               <- bind_rows(WN_2012_Q4,DRH_subset2012.04)
 WN_2013_Q4               <- bind_rows(WN_2013_Q4,DRH_subset2013.04)
 WN_2014_Q4               <- bind_rows(WN_2014_Q4,DRH_subset2014.04)
 WN_2015_Q4               <- bind_rows(WN_2015_Q4,DRH_subset2015.04)
@@ -115,6 +144,10 @@ WN_2017_Q4               <- bind_rows(WN_2017_Q4,DRH_subset2017.04)
 WN_2018_Q4               <- bind_rows(WN_2018_Q4,DRH_subset2018.04)
 
 rm(DRH)
+rm(DRH_subset2009.04)
+rm(DRH_subset2010.04)
+rm(DRH_subset2011.04)
+rm(DRH_subset2012.04)
 rm(DRH_subset2013.04)
 rm(DRH_subset2014.04)
 rm(DRH_subset2015.04)
@@ -125,6 +158,18 @@ rm(DRH_subset2018.04)
 
 Left merge data with meta and removing extra dataframes
 ```{r}
+WN_2009_Q4 <- left_join(WN_2009_Q4,meta_subset,
+                        by=c("Code"="CohierCode"))
+
+WN_2010_Q4 <- left_join(WN_2010_Q4,meta_subset,
+                        by=c("Code"="CohierCode"))
+
+WN_2011_Q4 <- left_join(WN_2011_Q4,meta_subset,
+                        by=c("Code"="CohierCode"))
+
+WN_2012_Q4 <- left_join(WN_2012_Q4,meta_subset,
+                        by=c("Code"="CohierCode"))
+
 WN_2013_Q4 <- left_join(WN_2013_Q4,meta_subset,
                         by=c("Code"="CohierCode"))
 
@@ -150,6 +195,10 @@ rm(meta_subset)
 gini coefficients
 ```{r}
 library(reldist)
+gini(WN_2009_Q4$Maandloon)
+gini(WN_2010_Q4$Maandloon)
+gini(WN_2011_Q4$Maandloon)
+gini(WN_2012_Q4$Maandloon)
 gini(WN_2013_Q4$Maandloon)
 gini(WN_2014_Q4$Maandloon)
 gini(WN_2015_Q4$Maandloon)
@@ -161,6 +210,10 @@ gini(WN_2018_Q4$Maandloon)
 Plotting Lorenz Curve
 ```{r}
 library(ineq)
+plot(Lc(WN_2009_Q4$Maandloon))
+plot(Lc(WN_2010_Q4$Maandloon))
+plot(Lc(WN_2011_Q4$Maandloon))
+plot(Lc(WN_2012_Q4$Maandloon))
 plot(Lc(WN_2013_Q4$Maandloon))
 plot(Lc(WN_2014_Q4$Maandloon))
 plot(Lc(WN_2015_Q4$Maandloon))
