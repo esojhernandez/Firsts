@@ -1,0 +1,164 @@
+---
+title: "Lorenz Curve"
+author: "Jose"
+date: "July 18, 2019"
+output: html_document
+---
+
+Set working directory
+```{r}
+setwd("C:/Users/Jose/Desktop/WN_Merged")
+```
+
+
+```{r}
+library(dplyr)
+library(tidyr)
+```
+
+Read in data. Data obtained from Jose. 
+```{r}
+# WN
+
+WN_2013_Q4 <- read.csv("WN_2013_Q4.csv", stringsAsFactors = FALSE)
+WN_2014_Q4 <- read.csv("WN_2014_Q4.csv", stringsAsFactors = FALSE)
+WN_2015_Q4 <- read.csv("WN_2015_Q4.csv", stringsAsFactors = FALSE)
+WN_2016_Q4 <- read.csv("WN_2016_Q4.csv", stringsAsFactors = FALSE)
+WN_2017_Q4 <- read.csv("WN_2017_Q4.csv", stringsAsFactors = FALSE)
+WN_2018_Q4 <- read.csv("WN_2018_Q4.csv", stringsAsFactors = FALSE)
+
+DRH <- read.csv("DRH2009-2018.csv")
+```
+
+# WN file manipulations
+Remove duplicates that meet the criteria that all variables are the same.
+```{r}
+WN_2013_Q4$Period <- "2013.04"
+WN_2013_Q4 <- WN_2013_Q4 %>% distinct()
+
+WN_2014_Q4$Period <- "2014.04"
+WN_2014_Q4 <- WN_2014_Q4 %>% distinct()
+
+WN_2015_Q4$Period <- "2015.04"
+WN_2015_Q4 <- WN_2015_Q4 %>% distinct()
+
+WN_2016_Q4$Period <- "2016.04"
+WN_2016_Q4 <- WN_2016_Q4 %>% distinct()
+
+WN_2017_Q4$Period <- "2017.04"
+WN_2017_Q4 <- WN_2017_Q4 %>% distinct()
+
+WN_2018_Q4$Period <- "2018.04"
+WN_2018_Q4 <- WN_2018_Q4 %>% distinct()
+```
+
+Read in data file with meta information.
+```{r}
+meta <- read.csv("2013_2018.csv", stringsAsFactors = FALSE)
+```
+
+Create subset of meta
+```{r}
+meta_subset <- meta[c("Sector_Code_SVB",
+                      "Economic_Activity_Rev_4",
+                      "Rechtsvorm",
+                      "Persoonsnr",
+                      "Fiscale_Eenheid",
+                      "Promising_Sector",
+                      "Gac_code_SVB",
+                      "GIS_adres_SVB",
+                      "X_coord_SVB",
+                      "Y_coord_SVB",
+                      "Region",
+                      "Aruba_ISIC_CBS",
+                      "ISIC_rev4_CBS",
+                      "Tourism_TSA",
+                      "CohierCode")]
+```
+
+
+```{r}
+DRH$Geslacht            <- as.character(DRH$Geslacht)
+DRH$burgelijke_staat    <- as.character(DRH$burgelijke_staat)
+DRH$Maandloon           <- as.integer(DRH$Maandloon)
+DRH$Werkweek            <- as.integer(DRH$Werkweek)
+DRH$Aanv_DVB            <- as.character(DRH$Aanv_DVB)
+DRH$Omschrijving        <- as.character(DRH$Omschrijving)
+DRH$Klasse              <- as.integer(DRH$Klasse)
+DRH$Code                <- as.character(DRH$Code)
+WN_2013_Q4$Code         <- as.character(WN_2013_Q4$Code)
+WN_2014_Q4$Code         <- as.character(WN_2014_Q4$Code)
+WN_2015_Q4$Code         <- as.character(WN_2015_Q4$Code)
+WN_2016_Q4$Code         <- as.character(WN_2016_Q4$Code)
+WN_2017_Q4$Code         <- as.character(WN_2017_Q4$Code)
+WN_2018_Q4$Code         <- as.character(WN_2018_Q4$Code)
+DRH$Datum_Inschrijving  <- as.character(DRH$Datum_Inschrijving)
+DRH$Period              <- as.character(DRH$Periode)
+DRH                     <- DRH[,-1]
+
+
+DRH_subset2013.04 <-filter(DRH,Period==2013.04)
+DRH_subset2014.04 <-filter(DRH,Period==2014.04)
+DRH_subset2015.04 <-filter(DRH,Period==2015.04)
+DRH_subset2016.04 <-filter(DRH,Period==2016.04)
+DRH_subset2017.04 <-filter(DRH,Period==2017.04)
+DRH_subset2018.04 <-filter(DRH,Period==2018.04)
+
+
+WN_2013_Q4               <- bind_rows(WN_2013_Q4,DRH_subset2013.04)
+WN_2014_Q4               <- bind_rows(WN_2014_Q4,DRH_subset2014.04)
+WN_2015_Q4               <- bind_rows(WN_2015_Q4,DRH_subset2015.04)
+WN_2016_Q4               <- bind_rows(WN_2016_Q4,DRH_subset2016.04)
+WN_2017_Q4               <- bind_rows(WN_2017_Q4,DRH_subset2017.04)
+WN_2018_Q4               <- bind_rows(WN_2018_Q4,DRH_subset2018.04)
+
+rm(DRH)
+rm(DRH_subset2013.04)
+rm(DRH_subset2014.04)
+rm(DRH_subset2015.04)
+rm(DRH_subset2016.04)
+rm(DRH_subset2017.04)
+rm(DRH_subset2018.04)
+```
+
+Left merge
+```{r}
+WN_2013_Q4 <- left_join(WN_2013_Q4,meta_subset,
+                        by=c("Code"="CohierCode"))
+
+WN_2014_Q4 <- left_join(WN_2014_Q4,meta_subset,
+                        by=c("Code"="CohierCode"))
+
+WN_2015_Q4 <- left_join(WN_2015_Q4,meta_subset,
+                        by=c("Code"="CohierCode"))
+
+WN_2016_Q4 <- left_join(WN_2016_Q4,meta_subset,
+                        by=c("Code"="CohierCode"))
+
+WN_2017_Q4 <- left_join(WN_2017_Q4,meta_subset,
+                        by=c("Code"="CohierCode"))
+
+WN_2018_Q4 <- left_join(WN_2018_Q4,meta_subset,
+                        by=c("Code"="CohierCode"))
+```
+
+
+```{r}
+library(reldist)
+gini(WN_2013_Q4$Maandloon)
+gini(WN_2014_Q4$Maandloon)
+gini(WN_2015_Q4$Maandloon)
+gini(WN_2016_Q4$Maandloon)
+gini(WN_2017_Q4$Maandloon)
+gini(WN_2018_Q4$Maandloon)
+```
+
+```{r}
+library(ineq)
+plot(Lc(WN_2013_Q4$Maandloon))
+plot(Lc(WN_2014_Q4$Maandloon))
+plot(Lc(WN_2015_Q4$Maandloon))
+plot(Lc(WN_2016_Q4$Maandloon))
+plot(Lc(WN_2017_Q4$Maandloon))
+plot(Lc(WN_2018_Q4$Maandloon))
+```
