@@ -2,7 +2,9 @@
 title: "Lorenz Curve"
 author: "Jose"
 date: "July 18, 2019"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 Set working directory
@@ -16,7 +18,7 @@ library(dplyr)
 library(tidyr)
 ```
 
-Read in data. Data obtained from Jose. 
+Read in data. 
 ```{r}
 # WN
 
@@ -76,7 +78,7 @@ meta_subset <- meta[c("Sector_Code_SVB",
                       "CohierCode")]
 ```
 
-
+Fix Formats for merging, bind rows and remove extra dataframes
 ```{r}
 DRH$Geslacht            <- as.character(DRH$Geslacht)
 DRH$burgelijke_staat    <- as.character(DRH$burgelijke_staat)
@@ -121,7 +123,7 @@ rm(DRH_subset2017.04)
 rm(DRH_subset2018.04)
 ```
 
-Left merge
+Left merge data with meta and removing extra dataframes
 ```{r}
 WN_2013_Q4 <- left_join(WN_2013_Q4,meta_subset,
                         by=c("Code"="CohierCode"))
@@ -140,9 +142,12 @@ WN_2017_Q4 <- left_join(WN_2017_Q4,meta_subset,
 
 WN_2018_Q4 <- left_join(WN_2018_Q4,meta_subset,
                         by=c("Code"="CohierCode"))
+
+rm(meta)
+rm(meta_subset)
 ```
 
-
+gini coefficients
 ```{r}
 library(reldist)
 gini(WN_2013_Q4$Maandloon)
@@ -153,6 +158,7 @@ gini(WN_2017_Q4$Maandloon)
 gini(WN_2018_Q4$Maandloon)
 ```
 
+Plotting Lorenz Curve
 ```{r}
 library(ineq)
 plot(Lc(WN_2013_Q4$Maandloon))
