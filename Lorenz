@@ -12,7 +12,6 @@ Set working directory
 setwd("C:/Users/Jose/Desktop/WN_Merged")
 ```
 
-
 ```{r}
 library(dplyr)
 library(tidyr)
@@ -212,8 +211,9 @@ Plotting Lorenz Curve
 library(ineq)
 WN_2009_Q4_Lc <- Lc(WN_2009_Q4$Maandloon)
 plot(WN_2009_Q4_Lc,
+     panel.first = grid(10, 10),
      main = "Lorenz Curve 2009",
-     sub  = "Source: DRH, SVB 2009 Q4",
+     sub  = "Gini = 0.34, Source: DRH, SVB 2009 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "blue")
@@ -221,7 +221,7 @@ plot(WN_2009_Q4_Lc,
 WN_2010_Q4_Lc <- Lc(WN_2010_Q4$Maandloon)
 plot(WN_2010_Q4_Lc,
      main = "Lorenz Curve 2010",
-     sub  = "Source: DRH, SVB 2010 Q4",
+     sub  = "Gini = 0.34, Source: DRH, SVB 2010 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "green")
@@ -230,7 +230,7 @@ plot(WN_2010_Q4_Lc,
 WN_2011_Q4_Lc <- Lc(WN_2011_Q4$Maandloon)
 plot(WN_2011_Q4_Lc,
      main = "Lorenz Curve 2011",
-     sub  = "Source: DRH, SVB 2011 Q4",
+     sub  = "Gini = 0.34, Source: DRH, SVB 2011 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "red")
@@ -238,7 +238,7 @@ plot(WN_2011_Q4_Lc,
 WN_2012_Q4_Lc <- Lc(WN_2012_Q4$Maandloon)
 plot(WN_2012_Q4_Lc,
      main = "Lorenz Curve 2012",
-     sub  = "Source: DRH, SVB 2012 Q4",
+     sub  = "Gini = 0.34, Source: DRH, SVB 2012 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "purple")
@@ -246,7 +246,7 @@ plot(WN_2012_Q4_Lc,
 WN_2013_Q4_Lc <- Lc(WN_2013_Q4$Maandloon)
 plot(WN_2013_Q4_Lc,
      main = "Lorenz Curve 2013",
-     sub  = "Source: DRH, SVB 2013 Q4",
+     sub  = "Gini = 0.34, Source: DRH, SVB 2013 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "brown")
@@ -254,7 +254,7 @@ plot(WN_2013_Q4_Lc,
 WN_2014_Q4_Lc <- Lc(WN_2014_Q4$Maandloon)
 plot(WN_2014_Q4_Lc,
      main = "Lorenz Curve 2014",
-     sub  = "Source: DRH, SVB 2014 Q4",
+     sub  = "Gini = 0.34, Source: DRH, SVB 2014 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "orange")
@@ -262,7 +262,7 @@ plot(WN_2014_Q4_Lc,
 WN_2015_Q4_Lc <- Lc(WN_2015_Q4$Maandloon)
 plot(WN_2015_Q4_Lc,
      main = "Lorenz Curve 2015",
-     sub  = "Source: DRH, SVB 2015 Q4",
+     sub  = "Gini = 0.34, Source: DRH, SVB 2015 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "yellow")
@@ -270,7 +270,7 @@ plot(WN_2015_Q4_Lc,
 WN_2016_Q4_Lc <- Lc(WN_2016_Q4$Maandloon)
 plot(WN_2016_Q4_Lc,
      main = "Lorenz Curve 2016",
-     sub  = "Source: DRH, SVB 2016 Q4",
+     sub  = "Gini = 0.34, Source: DRH, SVB 2016 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "pink")
@@ -278,7 +278,7 @@ plot(WN_2016_Q4_Lc,
 WN_2017_Q4_Lc <- Lc(WN_2017_Q4$Maandloon)
 plot(WN_2017_Q4_Lc,
      main = "Lorenz Curve 2017",
-     sub  = "Source: DRH, SVB 2017 Q4",
+     sub  = "Gini = 0.34, Source: DRH, SVB 2017 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "grey")
@@ -286,7 +286,7 @@ plot(WN_2017_Q4_Lc,
 WN_2018_Q4_Lc <- Lc(WN_2018_Q4$Maandloon)
 plot(WN_2018_Q4_Lc,
      main = "Lorenz Curve 2018",
-     sub  = "Source: DRH, SVB 2018 Q4",
+     sub  = "Gini = 0.34, Source: DRH, SVB 2018 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "blue")
