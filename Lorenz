@@ -14,12 +14,11 @@ setwd("C:/Users/Jose/Desktop/WN_Merged")
 
 library(dplyr)
 library(tidyr)
-
+library(reldist)
+library(ineq)
 
 #Read in data. 
-
 # WN
-
 WN_2009_Q4 <- read.csv("WN_2009_Q4.csv", stringsAsFactors = FALSE)
 WN_2010_Q4 <- read.csv("WN_2010_Q4.csv", stringsAsFactors = FALSE)
 WN_2011_Q4 <- read.csv("WN_2011_Q4.csv", stringsAsFactors = FALSE)
@@ -36,7 +35,6 @@ DRH <- read.csv("DRH2009-2018.csv")
 
 # WN file manipulations
 #Remove duplicates that meet the criteria that all variables are the same.
-
 WN_2009_Q4$Period <- "2009.04"
 WN_2009_Q4 <- WN_2009_Q4 %>% distinct()
 
@@ -69,12 +67,10 @@ WN_2018_Q4 <- WN_2018_Q4 %>% distinct()
 
 
 #Read in data file with meta information.
-
 meta <- read.csv("2013_2018.csv", stringsAsFactors = FALSE)
 
 
 #Create subset of meta
-
 meta_subset <- meta[c("Sector_Code_SVB",
                       "Economic_Activity_Rev_4",
                       "Rechtsvorm",
@@ -93,7 +89,6 @@ meta_subset <- meta[c("Sector_Code_SVB",
 
 
 #Fix Formats for merging, bind rows and remove extra dataframes
-
 DRH$Geslacht            <- as.character(DRH$Geslacht)
 DRH$burgelijke_staat    <- as.character(DRH$burgelijke_staat)
 DRH$Maandloon           <- as.integer(DRH$Maandloon)
@@ -155,7 +150,6 @@ rm(DRH_subset2018.04)
 
 
 #Left merge data with meta and removing extra dataframes
-
 WN_2009_Q4 <- left_join(WN_2009_Q4,meta_subset,
                         by=c("Code"="CohierCode"))
 
@@ -191,8 +185,6 @@ rm(meta_subset)
 
 
 #gini coefficients
-
-library(reldist)
 gini(WN_2009_Q4$Maandloon)
 gini(WN_2010_Q4$Maandloon)
 gini(WN_2011_Q4$Maandloon)
@@ -204,9 +196,8 @@ gini(WN_2016_Q4$Maandloon)
 gini(WN_2017_Q4$Maandloon)
 gini(WN_2018_Q4$Maandloon)
 
-#Plotting Lorenz Curve
 
-library(ineq)
+#Plotting Lorenz Curve
 WN_2009_Q4_Lc <- Lc(WN_2009_Q4$Maandloon)
 plot(WN_2009_Q4_Lc,
      panel.first = grid(10, 10),
