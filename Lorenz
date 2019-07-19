@@ -10,15 +10,16 @@ output:
 Set working directory
 ```{r}
 setwd("C:/Users/Jose/Desktop/WN_Merged")
-```
 
-```{r}
+
+
+
 library(dplyr)
 library(tidyr)
-```
 
-Read in data. 
-```{r}
+
+#Read in data. 
+
 # WN
 
 WN_2009_Q4 <- read.csv("WN_2009_Q4.csv", stringsAsFactors = FALSE)
@@ -33,11 +34,11 @@ WN_2017_Q4 <- read.csv("WN_2017_Q4.csv", stringsAsFactors = FALSE)
 WN_2018_Q4 <- read.csv("WN_2018_Q4.csv", stringsAsFactors = FALSE)
 
 DRH <- read.csv("DRH2009-2018.csv")
-```
+
 
 # WN file manipulations
-Remove duplicates that meet the criteria that all variables are the same.
-```{r}
+#Remove duplicates that meet the criteria that all variables are the same.
+
 WN_2009_Q4$Period <- "2009.04"
 WN_2009_Q4 <- WN_2009_Q4 %>% distinct()
 
@@ -67,15 +68,15 @@ WN_2017_Q4 <- WN_2017_Q4 %>% distinct()
 
 WN_2018_Q4$Period <- "2018.04"
 WN_2018_Q4 <- WN_2018_Q4 %>% distinct()
-```
 
-Read in data file with meta information.
-```{r}
+
+#Read in data file with meta information.
+
 meta <- read.csv("2013_2018.csv", stringsAsFactors = FALSE)
-```
 
-Create subset of meta
-```{r}
+
+#Create subset of meta
+
 meta_subset <- meta[c("Sector_Code_SVB",
                       "Economic_Activity_Rev_4",
                       "Rechtsvorm",
@@ -91,10 +92,10 @@ meta_subset <- meta[c("Sector_Code_SVB",
                       "ISIC_rev4_CBS",
                       "Tourism_TSA",
                       "CohierCode")]
-```
 
-Fix Formats for merging, bind rows and remove extra dataframes
-```{r}
+
+#Fix Formats for merging, bind rows and remove extra dataframes
+
 DRH$Geslacht            <- as.character(DRH$Geslacht)
 DRH$burgelijke_staat    <- as.character(DRH$burgelijke_staat)
 DRH$Maandloon           <- as.integer(DRH$Maandloon)
@@ -153,10 +154,10 @@ rm(DRH_subset2015.04)
 rm(DRH_subset2016.04)
 rm(DRH_subset2017.04)
 rm(DRH_subset2018.04)
-```
 
-Left merge data with meta and removing extra dataframes
-```{r}
+
+#Left merge data with meta and removing extra dataframes
+
 WN_2009_Q4 <- left_join(WN_2009_Q4,meta_subset,
                         by=c("Code"="CohierCode"))
 
@@ -189,10 +190,10 @@ WN_2018_Q4 <- left_join(WN_2018_Q4,meta_subset,
 
 rm(meta)
 rm(meta_subset)
-```
 
-gini coefficients
-```{r}
+
+#gini coefficients
+
 library(reldist)
 gini(WN_2009_Q4$Maandloon)
 gini(WN_2010_Q4$Maandloon)
@@ -204,10 +205,9 @@ gini(WN_2015_Q4$Maandloon)
 gini(WN_2016_Q4$Maandloon)
 gini(WN_2017_Q4$Maandloon)
 gini(WN_2018_Q4$Maandloon)
-```
 
-Plotting Lorenz Curve
-```{r}
+#Plotting Lorenz Curve
+
 library(ineq)
 WN_2009_Q4_Lc <- Lc(WN_2009_Q4$Maandloon)
 plot(WN_2009_Q4_Lc,
@@ -220,6 +220,7 @@ plot(WN_2009_Q4_Lc,
 
 WN_2010_Q4_Lc <- Lc(WN_2010_Q4$Maandloon)
 plot(WN_2010_Q4_Lc,
+     panel.first = grid(10, 10),
      main = "Lorenz Curve 2010",
      sub  = "Gini = 0.34, Source: DRH, SVB 2010 Q4",
      xlab = "Percentage of Jobs",
@@ -229,6 +230,7 @@ plot(WN_2010_Q4_Lc,
 
 WN_2011_Q4_Lc <- Lc(WN_2011_Q4$Maandloon)
 plot(WN_2011_Q4_Lc,
+     panel.first = grid(10, 10),
      main = "Lorenz Curve 2011",
      sub  = "Gini = 0.34, Source: DRH, SVB 2011 Q4",
      xlab = "Percentage of Jobs",
@@ -237,6 +239,7 @@ plot(WN_2011_Q4_Lc,
 
 WN_2012_Q4_Lc <- Lc(WN_2012_Q4$Maandloon)
 plot(WN_2012_Q4_Lc,
+     panel.first = grid(10, 10),
      main = "Lorenz Curve 2012",
      sub  = "Gini = 0.34, Source: DRH, SVB 2012 Q4",
      xlab = "Percentage of Jobs",
@@ -245,6 +248,7 @@ plot(WN_2012_Q4_Lc,
 
 WN_2013_Q4_Lc <- Lc(WN_2013_Q4$Maandloon)
 plot(WN_2013_Q4_Lc,
+     panel.first = grid(10, 10),
      main = "Lorenz Curve 2013",
      sub  = "Gini = 0.34, Source: DRH, SVB 2013 Q4",
      xlab = "Percentage of Jobs",
@@ -253,6 +257,7 @@ plot(WN_2013_Q4_Lc,
 
 WN_2014_Q4_Lc <- Lc(WN_2014_Q4$Maandloon)
 plot(WN_2014_Q4_Lc,
+     panel.first = grid(10, 10),
      main = "Lorenz Curve 2014",
      sub  = "Gini = 0.34, Source: DRH, SVB 2014 Q4",
      xlab = "Percentage of Jobs",
@@ -261,6 +266,7 @@ plot(WN_2014_Q4_Lc,
 
 WN_2015_Q4_Lc <- Lc(WN_2015_Q4$Maandloon)
 plot(WN_2015_Q4_Lc,
+     panel.first = grid(10, 10),
      main = "Lorenz Curve 2015",
      sub  = "Gini = 0.34, Source: DRH, SVB 2015 Q4",
      xlab = "Percentage of Jobs",
@@ -269,6 +275,7 @@ plot(WN_2015_Q4_Lc,
 
 WN_2016_Q4_Lc <- Lc(WN_2016_Q4$Maandloon)
 plot(WN_2016_Q4_Lc,
+     panel.first = grid(10, 10),
      main = "Lorenz Curve 2016",
      sub  = "Gini = 0.34, Source: DRH, SVB 2016 Q4",
      xlab = "Percentage of Jobs",
@@ -277,6 +284,7 @@ plot(WN_2016_Q4_Lc,
 
 WN_2017_Q4_Lc <- Lc(WN_2017_Q4$Maandloon)
 plot(WN_2017_Q4_Lc,
+     panel.first = grid(10, 10),
      main = "Lorenz Curve 2017",
      sub  = "Gini = 0.34, Source: DRH, SVB 2017 Q4",
      xlab = "Percentage of Jobs",
@@ -285,10 +293,10 @@ plot(WN_2017_Q4_Lc,
 
 WN_2018_Q4_Lc <- Lc(WN_2018_Q4$Maandloon)
 plot(WN_2018_Q4_Lc,
+     panel.first = grid(10, 10),
      main = "Lorenz Curve 2018",
      sub  = "Gini = 0.34, Source: DRH, SVB 2018 Q4",
      xlab = "Percentage of Jobs",
      ylab = "Percentage of Monthly Wages",
      col  = "blue")
-
 ```
